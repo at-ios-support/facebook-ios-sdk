@@ -18,8 +18,6 @@
 
 #import "FBSDKAppEventsUtility.h"
 
-#import <AdSupport/AdSupport.h>
-
 #import "FBSDKAccessToken.h"
 #import "FBSDKAppEvents.h"
 #import "FBSDKAppEventsDeviceInfo.h"
@@ -43,30 +41,30 @@
                                     shouldAccessAdvertisingID:(BOOL)shouldAccessAdvertisingID {
   NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
   parameters[@"event"] = eventCategory;
-
+  
   NSString *attributionID = [[self class] attributionID];  // Only present on iOS 6 and below.
   [FBSDKInternalUtility dictionary:parameters setObject:attributionID forKey:@"attribution"];
-
+  
   if (!implicitEventsOnly && shouldAccessAdvertisingID) {
     NSString *advertiserID = [[self class] advertiserID];
     [FBSDKInternalUtility dictionary:parameters setObject:advertiserID forKey:@"advertiser_id"];
   }
-
+  
   parameters[FBSDK_APPEVENTSUTILITY_ANONYMOUSID_KEY] = [self anonymousID];
-
+  
   FBSDKAdvertisingTrackingStatus advertisingTrackingStatus = [[self class] advertisingTrackingStatus];
   if (advertisingTrackingStatus != FBSDKAdvertisingTrackingUnspecified) {
     BOOL allowed = (advertisingTrackingStatus == FBSDKAdvertisingTrackingAllowed);
     parameters[@"advertiser_tracking_enabled"] = [@(allowed) stringValue];
   }
-
+  
   parameters[@"application_tracking_enabled"] = [@(!FBSDKSettings.limitEventAndDataUsage) stringValue];
-
+  
   [FBSDKAppEventsDeviceInfo extendDictionaryWithDeviceInfo:parameters];
-
+  
   static dispatch_once_t fetchBundleOnce;
   static NSMutableArray *urlSchemes;
-
+  
   dispatch_once(&fetchBundleOnce, ^{
     NSBundle *mainBundle = [NSBundle mainBundle];
     urlSchemes = [[NSMutableArray alloc] init];
@@ -77,44 +75,29 @@
       }
     }
   });
-
+  
   if (urlSchemes.count > 0) {
     [parameters setObject:[FBSDKInternalUtility JSONStringForObject:urlSchemes error:NULL invalidObjectHandler:NULL]
                    forKey:@"url_schemes"];
   }
-
+  
   return parameters;
 }
 
 + (NSString *)advertiserID
 {
-  NSString *result = nil;
-
-  Class ASIdentifierManagerClass = fbsdkdfl_ASIdentifierManagerClass();
-  if ([ASIdentifierManagerClass class]) {
-    ASIdentifierManager *manager = [ASIdentifierManagerClass sharedManager];
-    result = [[manager advertisingIdentifier] UUIDString];
-  }
-
-  return result;
+  return nil;
 }
 
 + (FBSDKAdvertisingTrackingStatus)advertisingTrackingStatus
 {
   static dispatch_once_t fetchAdvertisingTrackingStatusOnce;
   static FBSDKAdvertisingTrackingStatus status;
-
+  
   dispatch_once(&fetchAdvertisingTrackingStatusOnce, ^{
     status = FBSDKAdvertisingTrackingUnspecified;
-    Class ASIdentifierManagerClass = fbsdkdfl_ASIdentifierManagerClass();
-    if ([ASIdentifierManagerClass class]) {
-      ASIdentifierManager *manager = [ASIdentifierManagerClass sharedManager];
-      if (manager) {
-        status = [manager isAdvertisingTrackingEnabled] ? FBSDKAdvertisingTrackingAllowed : FBSDKAdvertisingTrackingDisallowed;
-      }
-    }
   });
-
+  
   return status;
 }
 
@@ -128,7 +111,7 @@
     // arbitrary 'XZ' to the front so it's easily distinguishable from IDFA's which
     // will only contain hex.
     result = [NSString stringWithFormat:@"XZ%@", [[NSUUID UUID] UUIDString]];
-
+    
     [self persistAnonymousID:result];
   }
   return result;
@@ -201,7 +184,7 @@
       behaviorToLog = FBSDKLoggingBehaviorDeveloperErrors;
     }
   }
-
+  
   [FBSDKLogger singleShotLogEntry:behaviorToLog logEntry:msg];
   NSError *error = [FBSDKError errorWithCode:FBSDKAppEventsFlushErrorCode message:msg];
   [[NSNotificationCenter defaultCenter] postNotificationName:FBSDKAppEventsLoggingResultNotification object:error];
@@ -219,7 +202,7 @@
                                                         error:NULL];
     cachedIdentifiers = [[NSMutableSet alloc] init];
   });
-
+  
   @synchronized(self) {
     if (![cachedIdentifiers containsObject:identifier]) {
       NSUInteger numMatches = [regex numberOfMatchesInString:identifier options:0 range:NSMakeRange(0, identifier.length)];
@@ -230,7 +213,7 @@
       }
     }
   }
-
+  
   return YES;
 }
 
@@ -241,7 +224,7 @@
                                 identifier, FBSDK_APPEVENTSUTILITY_MAX_IDENTIFIER_LENGTH]];
     return NO;
   }
-
+  
   return YES;
 }
 
@@ -250,7 +233,7 @@
   [[self class] ensureOnMainThread:NSStringFromSelector(_cmd) className:NSStringFromClass(self)];
   NSDictionary *data = @{ FBSDK_APPEVENTSUTILITY_ANONYMOUSID_KEY : anonymousID };
   NSString *content = [FBSDKInternalUtility JSONStringForObject:data error:NULL invalidObjectHandler:NULL];
-
+  
   [content writeToFile:[[self class] persistenceFilePath:FBSDK_APPEVENTSUTILITY_ANONYMOUSIDFILENAME]
             atomically:YES
               encoding:NSASCIIStringEncoding
@@ -283,7 +266,7 @@
   if (!token) {
     token = [FBSDKAccessToken currentAccessToken];
   }
-
+  
   NSString *appID = [FBSDKAppEvents loggingOverrideAppID] ?: token.appID ?: [FBSDKSettings appID];
   NSString *tokenString = token.tokenString;
   if (!tokenString || ![appID isEqualToString:token.appID]) {

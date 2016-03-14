@@ -26,12 +26,12 @@
 
 /*!
  @class FBSDKDynamicFrameworkLoader
-
+ 
  @abstract
  This class provides a way to load constants and methods from Apple Frameworks in a dynamic
  fashion.  It allows the SDK to be just dragged into a project without having to specify additional
  frameworks to link against.  It is an internal class and not to be used by 3rd party developers.
-
+ 
  As new types are needed, they should be added and strongly typed.
  */
 @interface FBSDKDynamicFrameworkLoader : NSObject
@@ -41,7 +41,7 @@
 /*!
  @abstract
  Load the kSecRandomDefault value from the Security Framework
-
+ 
  @return The kSecRandomDefault value or nil.
  */
 + (SecRandomRef)loadkSecRandomDefault;
@@ -49,7 +49,7 @@
 /*!
  @abstract
  Load the kSecAttrAccessible value from the Security Framework
-
+ 
  @return The kSecAttrAccessible value or nil.
  */
 + (CFTypeRef)loadkSecAttrAccessible;
@@ -57,7 +57,7 @@
 /*!
  @abstract
  Load the kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly value from the Security Framework
-
+ 
  @return The kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly value or nil.
  */
 + (CFTypeRef)loadkSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
@@ -65,7 +65,7 @@
 /*!
  @abstract
  Load the kSecAttrAccount value from the Security Framework
-
+ 
  @return The kSecAttrAccount value or nil.
  */
 + (CFTypeRef)loadkSecAttrAccount;
@@ -73,7 +73,7 @@
 /*!
  @abstract
  Load the kSecAttrService value from the Security Framework
-
+ 
  @return The kSecAttrService value or nil.
  */
 + (CFTypeRef)loadkSecAttrService;
@@ -81,7 +81,7 @@
 /*!
  @abstract
  Load the kSecAttrGeneric value from the Security Framework
-
+ 
  @return The kSecAttrGeneric value or nil.
  */
 + (CFTypeRef)loadkSecAttrGeneric;
@@ -89,7 +89,7 @@
 /*!
  @abstract
  Load the kSecValueData value from the Security Framework
-
+ 
  @return The kSecValueData value or nil.
  */
 + (CFTypeRef)loadkSecValueData;
@@ -97,7 +97,7 @@
 /*!
  @abstract
  Load the kSecClassGenericPassword value from the Security Framework
-
+ 
  @return The kSecClassGenericPassword value or nil.
  */
 + (CFTypeRef)loadkSecClassGenericPassword;
@@ -105,7 +105,7 @@
 /*!
  @abstract
  Load the kSecAttrAccessGroup value from the Security Framework
-
+ 
  @return The kSecAttrAccessGroup value or nil.
  */
 + (CFTypeRef)loadkSecAttrAccessGroup;
@@ -113,7 +113,7 @@
 /*!
  @abstract
  Load the kSecMatchLimitOne value from the Security Framework
-
+ 
  @return The kSecMatchLimitOne value or nil.
  */
 + (CFTypeRef)loadkSecMatchLimitOne;
@@ -121,7 +121,7 @@
 /*!
  @abstract
  Load the kSecMatchLimit value from the Security Framework
-
+ 
  @return The kSecMatchLimit value or nil.
  */
 + (CFTypeRef)loadkSecMatchLimit;
@@ -129,7 +129,7 @@
 /*!
  @abstract
  Load the kSecReturnData value from the Security Framework
-
+ 
  @return The kSecReturnData value or nil.
  */
 + (CFTypeRef)loadkSecReturnData;
@@ -137,7 +137,7 @@
 /*!
  @abstract
  Load the kSecClass value from the Security Framework
-
+ 
  @return The kSecClass value or nil.
  */
 + (CFTypeRef)loadkSecClass;
@@ -200,10 +200,6 @@ FBSDK_EXTERN const CATransform3D fbsdkdfl_CATransform3DIdentity;
 FBSDK_EXTERN OSStatus fbsdkdfl_AudioServicesCreateSystemSoundID(CFURLRef inFileURL, SystemSoundID *outSystemSoundID);
 FBSDK_EXTERN OSStatus fbsdkdfl_AudioServicesDisposeSystemSoundID(SystemSoundID inSystemSoundID);
 FBSDK_EXTERN void fbsdkdfl_AudioServicesPlaySystemSound(SystemSoundID inSystemSoundID);
-
-#pragma mark - AdSupport Classes
-
-FBSDK_EXTERN Class fbsdkdfl_ASIdentifierManagerClass(void);
 
 #pragma mark - SafariServices Classes
 
